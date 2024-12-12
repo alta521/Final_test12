@@ -247,27 +247,27 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.SerializationRate = 30;
 
         SetSpawnPos();
-
-        // 내가 위치해야 하는 idx 구하자
+        
+        //생성 위치
         int idx = PhotonNetwork.CurrentRoom.PlayerCount - 1;
 
-        // 나의 Player 생성
+        //Player 생성
         GameObject player = PhotonNetwork.Instantiate("Player", spawnPos[idx], Quaternion.identity);
 
-        // 로컬 플레이어의 PlayerMove를 가져와 설정
+        //PlayerMove를 가져오기
         if (player.GetComponent<PhotonView>().IsMine)
         {
             playerMove = player.GetComponent<PlayerMove>();
         }
 
-        // 마우스 포인터를 비활성화
+        // 마우스 비활성화
         Cursor.visible = false;
     }
 
     // spawnPosGroup Transform
     public Transform trSpawnPosGroup;
 
-    // Spawn 위치를 담아놓을 변수
+    // Spawn 위치
     public Vector3[] spawnPos;
 
     void SetSpawnPos()
