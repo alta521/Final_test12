@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int currentScore;
 
     // TMP 텍스트 컴포넌트를 연결할 변수
-    public TextMeshProUGUI scoreText;
+    //public TextMeshProUGUI scoreText;
 
     private void Awake()
     {
@@ -231,6 +231,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             // instance 에 나 자신을 셋팅
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -241,6 +242,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+
         SoundManager.instance.PlayBGM(SoundManager.EBgm.BGM_GAME);
 
         PhotonNetwork.SendRate = 30;
@@ -304,6 +306,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Cursor.visible = false;
             }
         }
+        currentScore = playerMove.score;
     }
 
     // 참여한 Player 의 PhotonView 추가

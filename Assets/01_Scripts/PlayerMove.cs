@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     CharacterController cc;
 
     public int score;
-    
+    public Text scoreText;
 
     //점프 파워
     float jumpPower = 5;
@@ -100,12 +100,14 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
                 //만약에 점프 중이라면
                 if(isJump == true)
                 {
+                //점프 아니라고 설정
+                    isJump = false;
+                    anim.SetBool("jump", false);
                     //착지 Trigger 발생
                     photonView.RPC(nameof(SetTriggerRpc), RpcTarget.All, "Land");
+
                 }
 
-                //점프 아니라고 설정
-                isJump = false;
             }
 
             //스페이바를 누르면 점프를 하고 싶다.
@@ -119,7 +121,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
                 //점프 중이라고 설정
                 isJump = true;
-
+                anim.SetBool("jump", true);
                 SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_JUMP);
             }
 
@@ -133,6 +135,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             //transform.position += dir * speed * Time.deltaTime;
             cc.Move(dir * speed * Time.deltaTime);
 
+            bool isWalking = (h != 0 || v != 0) && !isJump; // 이동 중이면서 점프 중이 아닐 때
+            anim.SetBool("walk", isWalking);
+
         }
         //나의 Player 가 아니라면
         else
@@ -144,8 +149,14 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         }
 
         //애니메이션에 Parameter 값 전달
-        anim.SetFloat("Horizontal", h);
-        anim.SetFloat("Vertical", v);
+        //anim.SetBool("walk", true);
+        
+        //anim.SetFloat("Horizontal", h);
+        //anim.SetFloat("Vertical", v);
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score.ToString();
+        }
     }
 
     [PunRPC]
